@@ -33,7 +33,7 @@ app.use(express.json());
 app.use("/api/v1/books", bookRoutes);
 
 app.get("/", (req, res) => {
-  res.send("Hello from the server");
+  res.send("<h1>Hello From The Server</h1>");
 });
 
 app.listen(PORT, () => console.log(`Server running on port: ${PORT}`));
