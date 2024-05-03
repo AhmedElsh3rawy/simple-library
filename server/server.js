@@ -1,6 +1,7 @@
 import express from "express";
 import "dotenv/config";
 import bookRoutes from "./routes/bookRoutes.js";
+import customerRoutes from "./routes/customerRoutes.js";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
 
@@ -31,6 +32,7 @@ const specs = swaggerJSDoc(options);
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 app.use(express.json());
 app.use("/api/v1/books", bookRoutes);
+app.use("/api/v1/customers", customerRoutes);
 
 app.get("/", (req, res) => {
   res.send("<h1>Hello From The Server</h1>");
