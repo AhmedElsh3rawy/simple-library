@@ -1,4 +1,5 @@
 import express from "express";
+import cors from "cors";
 import "dotenv/config";
 import bookRoutes from "./routes/bookRoutes.js";
 import customerRoutes from "./routes/customerRoutes.js";
@@ -29,8 +30,9 @@ const options = {
 
 const specs = swaggerJSDoc(options);
 
-app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
+app.use(cors());
 app.use(express.json());
+app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 app.use("/api/v1/books", bookRoutes);
 app.use("/api/v1/customers", customerRoutes);
 
@@ -38,4 +40,4 @@ app.get("/", (req, res) => {
   res.send("<h1>Hello From The Server</h1>");
 });
 
-app.listen(PORT, () => console.log(`Server running on port: ${PORT}`));
+app.listen(PORT, () => console.log(`Server listening on port: ${PORT}`));
