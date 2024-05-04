@@ -7,7 +7,7 @@ import {
   get_customer_by_email,
   add_customer,
   get_customer_by_email_and_password,
-  get_customer_password,
+  get_password,
 } from "../database/queries.js";
 
 export const getCustomerById = async (req, res) => {
@@ -34,7 +34,7 @@ export const register = async (req, res) => {
   const { name, email, password } = req.body;
   await pool.query(get_customer_by_email, [email], (error, results) => {
     if (results.rows.length) {
-      res.status(500).json({ message: FAIL });
+      res.status(500).json({ message: "Account already exist" });
     }
   });
 
@@ -48,24 +48,18 @@ export const register = async (req, res) => {
   }
 };
 
-// not completed
 export const login = async (req, res) => {
   const { email, password } = req.body;
-  await pool.query(get_customer_by_email, [email], (error, results) => {
-    if (error) throw error;
-    if (!results.rows.length) {
-      res.status(400).json({ massege: FAIL });
-    }
-  });
-  const customerPassword = await pool.query(get_customer_password, [email]);
+  const customer = await pool.query(get_customer_by_email, [email]);
   try {
-    const isMatched = await bcrypt.compare(customerPassword, password);
+    const isMatched = await bcrypt.compare(customer.password, password);
+
     if (isMatched) {
-      res.json({ massege: SUCCESS });
+      res.json({ massege: "login successfully" });
     } else {
-      res.status(500).json({ massege: FAIL });
+      res.status(401).json({ massege: "Invalid email or password" });
     }
   } catch {
-    res.status(500).json({ message: FAIL });
+    res.status(500).json({ message: ERROR });
   }
 };

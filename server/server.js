@@ -1,10 +1,13 @@
 import express from "express";
 import cors from "cors";
 import "dotenv/config";
+import bodyParser from "body-parser";
+import { notFound, errorHandler } from "./middlewares/errorHandler.js";
 import bookRoutes from "./routes/bookRoutes.js";
 import customerRoutes from "./routes/customerRoutes.js";
 import swaggerJSDoc from "swagger-jsdoc";
 import swaggerUi from "swagger-ui-express";
+import bodyParser from "body-parser";
 
 const app = express();
 
@@ -31,13 +34,13 @@ const options = {
 const specs = swaggerJSDoc(options);
 
 app.use(cors());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.json());
 app.use("/api-docs", swaggerUi.serve, swaggerUi.setup(specs));
 app.use("/api/v1/books", bookRoutes);
 app.use("/api/v1/customers", customerRoutes);
-
-app.get("/", (req, res) => {
-  res.send("<h1>Hello From The Server</h1>");
-});
+app.use(errorHandler);
+app.use(notFound);
 
 app.listen(PORT, () => console.log(`Server listening on port: ${PORT}`));

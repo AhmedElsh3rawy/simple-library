@@ -12,5 +12,4 @@ export const add_customer =
 export const get_customer_by_email_and_password =
   "SELECT * FROM Customer WHERE email = $1 AND password = $2";
 
-export const get_customer_password =
-  "SELECT password from Customer WHERE email = $1";
+export const get_password = "SELECT password from Customer WHERE email = $1";
