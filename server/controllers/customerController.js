@@ -6,8 +6,6 @@ import {
   get_customer_by_id,
   get_customer_by_email,
   add_customer,
-  get_customer_by_email_and_password,
-  get_password,
 } from "../database/queries.js";
 
 export const getCustomerById = async (req, res) => {
@@ -40,7 +38,7 @@ export const register = async (req, res) => {
 
   try {
     const hashedPassword = await bcrypt.hash(password, 10);
-    await pool.query(add_customer, [name, email, hashedPassword]);
+    await pool.query(add_customer, [name, email, password]);
     res.status(201).json({ message: SUCCESS });
   } catch (error) {
     console.error(error);
@@ -50,16 +48,20 @@ export const register = async (req, res) => {
 
 export const login = async (req, res) => {
   const { email, password } = req.body;
+  if (!email || !password) {
+    return res.json({ message: "email and password are required" });
+  }
+
   const customer = await pool.query(get_customer_by_email, [email]);
   try {
-    const isMatched = await bcrypt.compare(customer.password, password);
-
-    if (isMatched) {
-      res.json({ massege: "login successfully" });
+    const match = await bcrypt.compare(customer.password, password);
+    if (match) {
+      res.json({ massege: "Logged in successfully", status: 200 });
     } else {
       res.status(401).json({ massege: "Invalid email or password" });
     }
-  } catch {
-    res.status(500).json({ message: ERROR });
+  } catch (err) {
+    console.error(err);
+    res.json({ massege: err.message });
   }
 };
