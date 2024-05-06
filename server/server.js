@@ -5,9 +5,6 @@ import { notFound, errorHandler } from "./middlewares/errorHandler.js";
 import bookRoutes from "./routes/bookRoutes.js";
 import customerRoutes from "./routes/customerRoutes.js";
 import orderRoutes from "./routes/orderRoutes.js";
-import swaggerJSDoc from "swagger-jsdoc";
-import swaggerUi from "swagger-ui-express";
-import bodyParser from "body-parser";
 
 const app = express();
 
