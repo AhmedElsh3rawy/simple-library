@@ -8,3 +8,8 @@ export const get_customer_by_id = "SELECT * FROM Customer WHERE id = $1";
 
 export const add_customer =
   "INSERT INTO Customer (name, email, password) VALUES ($1, $2, $3)";
+
+export const add_order =
+  "INSERT INTO Orders (customer_id, book_id, quantity, city, street, ship_date) VALUES ($1, $2, $3, $4, $5, $6)";
+
+export const delete_order = "DELETE FROM Orders WHERE id = $1";

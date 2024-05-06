@@ -54,7 +54,7 @@ export const login = async (req, res) => {
 
   const customer = await pool.query(get_customer_by_email, [email]);
   try {
-    const match = await bcrypt.compare(customer.password, password);
+    const match = await bcrypt.compare(password, customer.password);
     if (match) {
       res.json({ massege: "Logged in successfully", status: 200 });
     } else {
