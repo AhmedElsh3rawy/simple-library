@@ -1,5 +1,10 @@
 import pool from "../database/db.js";
-import { add_order, delete_order } from "../database/queries.js";
+import { get_orders, add_order, delete_order } from "../database/queries.js";
+
+export const getOrders = async (req, res) => {
+  const orders = await pool.query(get_orders);
+  await res.json(orders);
+};
 
 export const createOrder = async (req, res) => {
   const { customerId, bookId, quantity, city, street, shipDate } = req.body;
@@ -15,9 +20,9 @@ export const createOrder = async (req, res) => {
       street,
       shipDate,
     ]);
-    res.send(201).json({ massege: "Created successfuly" });
+    res.json({ massege: "Created successfuly" });
   } catch (error) {
     console.error(error);
-    res.send(500).json({ massege: error.massege });
+    res.json({ massege: error.massege });
   }
 };
